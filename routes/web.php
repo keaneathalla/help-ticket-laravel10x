@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TicketController;
 use App\Models\User;
 use OpenAI\Laravel\Facades\OpenAI;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/avatar', [ProfileController::class, 'avatar'])->name('update.avatar');
     Route::patch('/profile/avatar/ai', [ProfileController::class, 'generate'])->name('avatar.ai');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+// Route For Help Tickets
+Route::middleware('auth')->prefix('ticket')->group(function () {
+    Route::resource('/', TicketController::class);
 });
 
 // Github Login
