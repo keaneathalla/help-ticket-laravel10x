@@ -37,8 +37,11 @@ class TicketController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'user_id' => auth()->user()->id,
-            'attachment' => $request->file('attachment')->store('Attachments')
+
         ]);
+        if ($request->attachment) {
+            $ticket['attachment'] = $request->file('attachment')->store('Attachments');
+        }
         return response()->redirectTo(route('ticket.index'));
     }
 

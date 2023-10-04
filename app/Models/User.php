@@ -43,4 +43,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    protected function isAdmin(): Attribute
+    {
+        $admins = ['zenken993@gmail.com'];
+        return Attribute::make(
+            get: fn () => in_array($this->email, $admins)
+        );
+    }
 }
