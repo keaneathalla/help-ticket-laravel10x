@@ -13,7 +13,8 @@ class TicketController extends Controller
      */
     public function index()
     {
-        return view('ticket.create');
+        $tickets = Ticket::where('user_id', auth()->user()->id)->get();
+        return view('ticket.index', compact('tickets'));
     }
 
     /**
@@ -36,7 +37,7 @@ class TicketController extends Controller
             'user_id' => auth()->user()->id,
             'attachment' => $request->file('attachment')->store('Attachments')
         ]);
-        return response()->redirect(route('ticket.index'));
+        return response()->redirectTo(route('ticket.index'));
     }
 
     /**
