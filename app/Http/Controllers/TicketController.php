@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 
@@ -53,7 +55,7 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        //
+        return view('ticket.edit', compact('ticket'));
     }
 
     /**
@@ -61,7 +63,13 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        //
+        $ticket = $request->validated();
+        if ($oldAttachment = $request->ticket->attachment) {
+            Storage::delete($oldAttachment);
+        }
+        $ticket['attachment'] =  $request->file('attachment')->store('Attachments');
+        Ticket::where('user_id', auth()->user()->id)->update($ticket);
+        return redirect(route('ticket.index'));
     }
 
     /**
@@ -69,6 +77,7 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
-        //
+        $ticket->delete();
+        return response()->redirectTo(route('ticket.index'));
     }
 }
