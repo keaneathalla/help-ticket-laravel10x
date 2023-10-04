@@ -21,6 +21,7 @@ class TicketController extends Controller
      */
     public function create()
     {
+        return view('ticket.create');
     }
 
     /**
@@ -28,7 +29,14 @@ class TicketController extends Controller
      */
     public function store(StoreTicketRequest $request)
     {
-        //
+
+        $ticket = Ticket::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'user_id' => auth()->user()->id,
+            'attachment' => $request->file('attachment')->store('Attachments')
+        ]);
+        return response()->redirect(route('ticket.index'));
     }
 
     /**
