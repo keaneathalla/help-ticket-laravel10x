@@ -25,14 +25,23 @@
                         </x-danger-button>
                     </form>
                 </div>
-                <div class="flex">
-                    <x-primary-button>
-                        Approve
-                    </x-primary-button>
-                    <x-primary-button class="ml-2">
-                        Rejecet
-                    </x-primary-button>
-                </div>
+                @if (auth()->user()->isAdmin)
+                    <div class="flex">
+                        <form action="{{ route('ticket.update', $ticket->id) }}" method="POST">
+                            @method('patch')
+                            @csrf
+                            <input type="hidden" name="status" value="approved">
+                            <x-primary-button>
+                                Approve
+                            </x-primary-button>
+                        </form>
+                        <x-primary-button class="ml-2">
+                            Rejecet
+                        </x-primary-button>
+                    </div>
+                @else
+                    <p class="text-white"> Status: {{ $ticket->status }}</p>
+                @endif
             </div>
         </div>
     </div>

@@ -15,7 +15,10 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::where('user_id', auth()->user()->id)->get();
+        if (auth()->user()->isAdmin) {
+            $tickets = Ticket::all();
+        } else
+            $tickets = Ticket::where('user_id', auth()->user()->id)->get();
         return view('ticket.index', compact('tickets'));
     }
 
@@ -66,11 +69,14 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
+        dd($request->all());
         $ticket = $request->validated();
         if ($oldAttachment = $request->ticket->attachment) {
             Storage::delete($oldAttachment);
         }
-        $ticket['attachment'] =  $request->file('attachment')->store('Attachments');
+        if ($request->attachment) {
+            $ticket['attachment'] =  $request->file('attachment')->store('Attachments');
+        }
         Ticket::where('user_id', auth()->user()->id)->update($ticket);
         return redirect(route('ticket.index'));
     }

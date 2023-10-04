@@ -24,6 +24,7 @@ class UpdateTicketRequest extends FormRequest
         return [
             'title' => ['required',  'string', 'max:255'],
             'description' => ['required', 'string'],
+            'status' => ['string'],
             'attachment' =>  ['file', 'sometimes', 'mimes:jpg,jpeg,png,pdf'],
         ];
     }
