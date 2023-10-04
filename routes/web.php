@@ -23,22 +23,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::patch('/profile/avatar', [ProfileController::class, 'avatar'])->name('update.avatar');
-    Route::patch('/profile/avatar/ai', [ProfileController::class, 'generate'])->name('avatar.ai');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-// Route For Help Tickets
-Route::middleware('auth')->prefix('ticket')->group(function () {
-    Route::resource('/', TicketController::class);
-});
-
 // Github Login
 Route::post('/auth/redirect', function () {
     return Socialite::driver('github')->redirect();
@@ -62,5 +46,25 @@ Route::get('/auth/callback', function () {
 
     // $user->token
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/avatar', [ProfileController::class, 'avatar'])->name('update.avatar');
+    Route::patch('/profile/avatar/ai', [ProfileController::class, 'generate'])->name('avatar.ai');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+// Route For Help Tickets
+Route::middleware('auth')->prefix('ticket')->name('ticket.')->group(function () {
+    Route::resource('/', TicketController::class);
+});
+
+
 
 require __DIR__ . '/auth.php';
