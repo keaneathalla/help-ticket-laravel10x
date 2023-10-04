@@ -4,7 +4,7 @@
         <div class="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md dark:bg-gray-800 sm:max-w-xl sm:rounded-lg">
             @foreach ($tickets as $ticket)
                 <div class="flex justify-between py-4 text-white">
-                    <a href="">{{ $ticket->title }}</a>
+                    <a href="{{ route('ticket.show', $ticket->id) }}">{{ $ticket->title }}</a>
                     <p>{{ $ticket->created_at->diffForHumans() }}</p>
                 </div>
             @endforeach
